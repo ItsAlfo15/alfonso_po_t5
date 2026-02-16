@@ -21,14 +21,24 @@ class WatchProvider extends ChangeNotifier {
     if (response.statusCode != 200) return;
 
     final Map<String, dynamic> decodedData = jsonDecode(response.body);
+   
+    print(decodedData['data']);
 
-    decodedData.forEach((key, value) {
-      Reloj relojTemp = Reloj.fromJson(value);
+    Map<String, dynamic> mapData = decodedData['data'];
+
+    mapData.forEach((key, value) {
+      Reloj relojTemp;
+
+      relojTemp = Reloj.fromJson(value);
 
       relojTemp.id = key;
 
       watches.add(relojTemp);
     });
+
+    print(watches);
+
+   
 
     notifyListeners();
 
