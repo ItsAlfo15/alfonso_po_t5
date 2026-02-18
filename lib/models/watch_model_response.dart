@@ -158,7 +158,7 @@ class Caja {
     factory Caja.fromJson(Map<String, dynamic> json) => Caja(
         material: json["material"],
         diametro: json["diametro"],
-        resistenciaAgua: json["resistencia_agua"],
+        resistenciaAgua: json["resistencia_agua"] ?? 'Sin datos' ,
         materialBisel: json["material_bisel"],
         cristal: json["cristal"],
         esfera: json["esfera"],
@@ -178,8 +178,8 @@ class Caja {
 
 class Calibre {
     String tipoCalibre;
-    String codCalibre;
-    int reservaMarcha;
+    String? codCalibre;
+    int? reservaMarcha;
 
     Calibre({
         required this.tipoCalibre,
@@ -189,8 +189,8 @@ class Calibre {
 
     factory Calibre.fromJson(Map<String, dynamic> json) => Calibre(
         tipoCalibre: json["tipo_calibre"],
-        codCalibre: json["cod_calibre"],
-        reservaMarcha: json["reserva_marcha"],
+        codCalibre: json["cod_calibre"] ?? 'Sin datos',
+        reservaMarcha: json["reserva_marcha"] ?? 0,
     );
 
     Map<String, dynamic> toJson() => {

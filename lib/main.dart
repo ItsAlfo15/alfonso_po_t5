@@ -1,4 +1,6 @@
 import 'package:alfonso_po_t5/pages/home_page.dart';
+import 'package:alfonso_po_t5/pages/login_page.dart';
+import 'package:alfonso_po_t5/pages/register_page.dart';
 import 'package:alfonso_po_t5/providers/watch_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,12 +31,14 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'App Relojes',
-      initialRoute: 'home',
+      initialRoute: 'register',
       routes: {
-        'home': (_) => HomeScreen(),
+        'home': (_) => HomePage(),
+        'register': (_) => RegisterPage(),
+        'login': (_) => LoginPage(),
       },
       theme: ThemeData.dark().copyWith(
-        appBarTheme: AppBarTheme(backgroundColor: Colors.black,)
+        appBarTheme: AppBarTheme(backgroundColor: Colors.black)
       )
     );
   }
