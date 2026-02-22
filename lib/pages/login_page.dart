@@ -18,9 +18,14 @@ class LoginPage extends StatelessWidget {
                 child: LoginCard(),
               ),
               SizedBox(height: 50),
-              Text(
-                '¿Todavía sin cuenta? Crea una ahora',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, 'register');
+                },
+                child: Text(
+                  '¿Todavía sin cuenta? Crea una ahora',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),
