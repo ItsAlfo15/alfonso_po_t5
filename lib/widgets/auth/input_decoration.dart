@@ -9,12 +9,29 @@ class InputDecorations {
     return InputDecoration(
       labelText: labelText,
       hintText: hintText,
-      labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      labelStyle: const TextStyle(
+        color: Color(0xFFD4AF37),
+        fontWeight: FontWeight.w500,
+      ),
+      hintStyle: const TextStyle(color: Colors.white24),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderSide: const BorderSide(color: Colors.white24),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderSide: BorderSide(color: Colors.white24),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderSide: const BorderSide(color: Color(0xFFD4AF37), width: 1.5),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderSide: const BorderSide(color: Colors.redAccent),
       ),
       prefixIcon: prefixIcon != null
-          ? Icon(prefixIcon, color: Colors.white)
+          ? Icon(prefixIcon, color: Colors.white54)
           : null,
     );
   }

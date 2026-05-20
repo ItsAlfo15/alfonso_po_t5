@@ -5,11 +5,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 
 class LoginFormProvider extends ChangeNotifier {
-  final storage = FlutterSecureStorage();
-
+  final storage = const FlutterSecureStorage();
   final _urlBase = 'https://backend-relojes-mejorado.onrender.com/api/v1';
 
-  // Key que se va a usar para referenciar al formulario de logueo
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   String email = '';
@@ -17,6 +15,16 @@ class LoginFormProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? errorMessage;
   Map<String, dynamic>? currentUser;
+
+  // Funcion que resetea el formulario y el estado del provider (para evitar que al cerrar sesion queden datos anteriores)
+  void resetForm() {
+    email = '';
+    password = '';
+    errorMessage = null;
+    _isLoading = false;
+    formKey = GlobalKey<FormState>();
+    notifyListeners();
+  }
 
   Future<String?> getToken() async {
     return await storage.read(key: 'access_token');
@@ -26,26 +34,22 @@ class LoginFormProvider extends ChangeNotifier {
     final token = await storage.read(key: 'access_token');
     final userJson = await storage.read(key: 'user_data');
 
-    if (token != null && userJson != null) {
-      try {
-        // Me traigo los datos del usuario
-        currentUser = jsonDecode(userJson);
-        notifyListeners();
+    if (token == null || userJson == null) return false;
 
-        // Verifico si el token es valido y no esta expirado
-        final response = await get(
-          Uri.parse('$_urlBase/user/me'),
-          headers: {'Authorization': 'Bearer $token'},
-        );
+    try {
+      currentUser = jsonDecode(userJson);
+      notifyListeners();
 
-        if (response.statusCode == 200) {
-          return true;
-        } else if (response.statusCode == 401) {
-          await logout();
-        }
-      } catch (error) {
-        return true;
-      }
+      final response = await get(
+        Uri.parse('$_urlBase/user/me'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) return true;
+      
+      if (response.statusCode == 401) await logout();
+    } catch (_) {
+      return currentUser != null;
     }
     return false;
   }
@@ -78,7 +82,6 @@ class LoginFormProvider extends ChangeNotifier {
     await storage.delete(key: 'user_data');
 
     final uri = Uri.parse('$_urlBase/user/login');
-
     final response = await post(
       uri,
       headers: {'Content-Type': 'application/json'},
@@ -96,15 +99,12 @@ class LoginFormProvider extends ChangeNotifier {
 
       currentUser = user;
       notifyListeners();
-
       return accessToken;
     }
 
-    final message =
-        decodedData['data']?['error']?['message'] ??
+    final message = decodedData['data']?['error']?['message'] ??
         decodedData['message'] ??
         'Error desconocido';
-
     throw Exception(message);
   }
 
@@ -117,9 +117,6 @@ class LoginFormProvider extends ChangeNotifier {
   }
 
   bool isValidForm() {
-    // print(formKey.currentState?.validate());
-    // print('Email: $email');
-    // print('Password: $password');
     return formKey.currentState?.validate() ?? false;
   }
 }
